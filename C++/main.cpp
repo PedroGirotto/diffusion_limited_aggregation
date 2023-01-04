@@ -201,7 +201,7 @@ int* ADL(const int& comprimento, const int& altura, const int& quantidadeGotasTe
     int gotasMaximas = quantidadeGotasMaximas;
     vector<Gota> listaGotas;
 
-    default_random_engine defEngine;
+    default_random_engine defEngine(time(nullptr));
     uniform_int_distribution<int> spawnGota(0, comprimento-1);
     uniform_int_distribution<int> direcaoMovimentacao(1, 4);
 
@@ -277,7 +277,7 @@ int main(int argc, char** argv)
     {
         return 0;
     }
-    
+
     const int comprimento = abs(stoi(argv[1]));
     const int altura = abs(stoi(argv[2]));
     const int gotasTela = abs(stoi(argv[3]));
