@@ -4,7 +4,6 @@
 #include <random>
 #include <vector>
 #include <fstream>
-#include <cstdint>
 using namespace std;
 
 class Gota
@@ -262,49 +261,6 @@ int* ADL(const int& comprimento, const int& altura, const int& quantidadeGotasTe
 }
 
 
-// Crear BitMap
-struct BmpHeader {
-    char bitmapSignatureBytes[2] = {'B', 'M'};
-    uint32_t sizeOfBitmapFile = 54 + 786432;
-    uint32_t reservedBytes = 0;
-    uint32_t pixelDataOffset = 54;
-} bmpHeader;
-
-struct BmpInfoHeader {
-    uint32_t sizeOfThisHeader = 40;
-    int32_t width = 512; // in pixels
-    int32_t height = 512; // in pixels
-    uint16_t numberOfColorPlanes = 1; // must be 1
-    uint16_t colorDepth = 24;
-    uint32_t compressionMethod = 0;
-    uint32_t rawBitmapDataSize = 0; // generally ignored
-    int32_t horizontalResolution = 3780; // in pixel per meter
-    int32_t verticalResolution = 3780; // in pixel per meter
-    uint32_t colorTableEntries = 0;
-    uint32_t importantColors = 0;
-} bmpInfoHeader;
-
-struct Pixel {
-    uint8_t blue = 255;
-    uint8_t green = 255;
-    uint8_t red = 255;
-} pixel;
-
-
-/*  TESTE PLOTAR MATRIZ LINHA
-cout << regiao << "\n";
-    for(int i = 0; i < 3; i++) // 3 = linhas
-    {
-        for(int j = 0; j < 4; j++) // 4 = colunas
-        {
-            cout << regiao[i*4 + j] << "\t";
-        }
-        cout << "\n";
-    }
-*/
-
-// 5 6 -> 30
-
 // 0 representa vazio na região
 // 1 representa semente na região
 // 2 representa gota na região
@@ -317,45 +273,32 @@ cout << regiao << "\n";
 int main(int argc, char** argv)
 {
     // Não rodar o código caso não foi inicializado com os parâmetros corretos
-    /*
     if(argc != 5)
     {
         return 0;
     }
-
     
     const int comprimento = abs(stoi(argv[1]));
     const int altura = abs(stoi(argv[2]));
     const int gotasTela = abs(stoi(argv[3]));
     const int gotasmaximas = abs(stoi(argv[4]));
 
-
     int* regiao = ADL(comprimento, altura, gotasTela, gotasmaximas);
+
+    ofstream plote;
+    plote.open("regiao.txt", ios::out);
 
     for(int i = 0; i < altura; i++)
     {
         for(int j = 0; j < comprimento; j++)
         {
-            cout << regiao[i*comprimento + j] << " ";
+            plote << regiao[i*comprimento + j] << " ";
         }
-        cout << "\n";
+        plote << "\n";
     }
 
+    plote.close();
     free(regiao);
-    */
-
-    ofstream fout("output.bmp", ios::binary);
-
-    fout.write((char *) &bmpHeader, 14);
-    fout.write((char *) &bmpInfoHeader, 40);
-
-
-    // writing pixel data
-    size_t numberOfPixels = bmpInfoHeader.width * bmpInfoHeader.height;
-    for (int i = 0; i < numberOfPixels; i++) {
-        fout.write((char *) &pixel, 3);
-    }
-    fout.close();
 
     return 0;
 }
